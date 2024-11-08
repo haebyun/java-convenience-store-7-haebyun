@@ -1,5 +1,7 @@
 package store.domain.vo;
 
+import store.exception.ErrorMessage;
+
 public class Stock {
     private Integer quantity;
 
@@ -14,7 +16,7 @@ public class Stock {
 
     static void validate(Integer quantity) {
         if(quantity < 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(ErrorMessage.INVALID_STOCK_QUANTITY.getMessage());
         }
     }
 
