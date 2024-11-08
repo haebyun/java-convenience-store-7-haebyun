@@ -8,15 +8,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 public class StockTests {
+    private final Integer initialQuantity = 100;
 
     @Test
     @DisplayName("재고 수량은 재고의 갯수를 나타내는 필드를 갖는다.")
     void testCreateStock() {
-        Integer quantity = 100;
+        Stock stock = Stock.of(initialQuantity);
 
-        Stock stock = Stock.of(quantity);
-
-        assertThat(stock.getQuantity()).isEqualTo(quantity);
+        assertThat(stock.getQuantity()).isEqualTo(initialQuantity);
     }
 
     @ParameterizedTest
