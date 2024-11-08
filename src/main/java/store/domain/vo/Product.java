@@ -1,11 +1,11 @@
-package store.domain.product.vo;
+package store.domain.vo;
 
 public class Product {
     private final String name;
     private final Price price;
     private final String promotionName;
 
-    public Product(String name, Price price, String promotionName) {
+    private Product(String name, Price price, String promotionName) {
         this.name = name;
         this.price = price;
         this.promotionName = promotionName;
