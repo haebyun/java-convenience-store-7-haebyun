@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class ProductTests {
 
@@ -22,4 +24,20 @@ public class ProductTests {
         assertThat(product.getStockValue()).isEqualTo(stockQuantity);
         assertThat(product.getPromotionName()).isEqualTo(promotionName);
     }
+
+    @ParameterizedTest
+    @ValueSource(ints = {1,2,3,4,5})
+    @DisplayName("재고 감소 로직을 가진다.")
+    void testsDecreaseStockQuantity(Integer quantity) {
+        String productName = "요아정";
+        Integer productPrice = 2500;
+        Integer stockInitialQuantity = 100;
+        String promotionName = "2+1";
+
+        Product product = Product.of(productName, productPrice, stockInitialQuantity, promotionName);
+        product.decreaseStock(quantity);
+
+        assertThat(product.getStockValue()).isEqualTo(stockInitialQuantity - quantity);
+    }
+
 }
