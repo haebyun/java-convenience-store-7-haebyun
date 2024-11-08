@@ -26,10 +26,10 @@ public class Stock {
 
     public void decrease(int amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(ErrorMessage.INVALID_DECREASE_STOCK_AMOUNT.getMessage());
         }
         if (this.quantity < amount) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(ErrorMessage.INVALID_DECREASE_STOCK_AMOUNT.getMessage());
         }
         this.quantity -= amount;
     }
