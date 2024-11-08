@@ -8,7 +8,14 @@ public class Stock {
     }
 
     public static Stock of(Integer quantity) {
+        validate(quantity);
         return new Stock(quantity);
+    }
+
+    static void validate(Integer quantity) {
+        if(quantity < 0) {
+            throw new IllegalArgumentException();
+        }
     }
 
     public Integer getQuantity() {
