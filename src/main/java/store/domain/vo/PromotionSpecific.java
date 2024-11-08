@@ -17,4 +17,11 @@ public class PromotionSpecific {
         }
         return new PromotionSpecific(buy, get);
     }
+
+    public Integer calculateFreeCount(Integer purchasedQuantity) {
+        if (purchasedQuantity < buy) {
+            return 0; // 구매 수량이 조건을 달성하지 못하면 무료 제공 없음
+        }
+        return (purchasedQuantity / buy) * get;
+    }
 }
