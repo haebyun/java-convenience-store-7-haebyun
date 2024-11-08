@@ -40,4 +40,18 @@ public class ProductTests {
         assertThat(product.getStockValue()).isEqualTo(stockInitialQuantity - quantity);
     }
 
+    @ParameterizedTest
+    @ValueSource(ints = {2,3,4,5})
+    @DisplayName("재고 감소 로직을 가진다.")
+    void testsToLargeDecreaseStockQuantity(Integer quantity) {
+        String productName = "요아정";
+        Integer productPrice = 2500;
+        Integer stockInitialQuantity = 1;
+        String promotionName = "2+1";
+
+        Product product = Product.of(productName, productPrice, stockInitialQuantity, promotionName);
+
+        assertThatThrownBy(() -> product.decreaseStock(quantity))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
 }
