@@ -25,4 +25,15 @@ public class StockTests {
         assertThatThrownBy(() -> Stock.of(quantity))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+    @ParameterizedTest
+    @ValueSource(ints = {1,2,3,4,5})
+    @DisplayName("재고 감소 로직이 존재한다.")
+    void testsValidDecreaseStockQuantity(int amount) {
+        Stock stock = Stock.of(initialQuantity);
+
+        stock.decrease(amount);
+
+        assertThat(stock.getQuantity()).isEqualTo(initialQuantity - amount);
+    }
 }
