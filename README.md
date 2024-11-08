@@ -57,8 +57,8 @@
 - 프로모션(Promotion)
     - [ ] 프로모션 이름과 기간(Period)을 갖는다.
     - [x] 상품 주문 날짜에 따라 프로모션이 적용되는 지 확인할 수 있다.
-    - [ ] N개 구매 시 1개 무료 증정(Buy N Get 1 Free)의 형태(PromotionType)를 갖는다.
-      - [ ] PromotionType으로 무료 증정 갯수를 계산할 수 있다.
+    - [x] N개 구매 시 1개 무료 증정(Buy N Get 1 Free)의 형태(PromotionType)를 갖는다.
+      - [x] PromotionType으로 무료 증정 갯수를 계산할 수 있다.
 
 - 프로모션 매니저(PromotionManager)
     - [ ] 프로모션 혜택을 프로모션 재고 내에서 적용한다.
