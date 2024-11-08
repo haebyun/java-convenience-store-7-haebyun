@@ -1,6 +1,7 @@
 package store.domain.vo;
 
-import org.assertj.core.api.Assertions;
+import static org.assertj.core.api.Assertions.*;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,14 +17,14 @@ public class PriceTests {
 
         Price price = Price.of(value);
 
-        Assertions.assertThat(price.getValue()).isEqualTo(value);
+        assertThat(price.getValue()).isEqualTo(value);
     }
 
     @ParameterizedTest
     @ValueSource(ints = {-1000, -100, 0})
     @DisplayName("상품의 가격은 0보다 커야 한다.")
     void testsInvalidPriceValue(int value) {
-        Assertions.assertThatThrownBy(() -> Price.of(value))
+        assertThatThrownBy(() -> Price.of(value))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }
