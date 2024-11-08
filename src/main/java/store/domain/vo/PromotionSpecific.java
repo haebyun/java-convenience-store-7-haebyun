@@ -10,6 +10,9 @@ public class PromotionSpecific {
     }
 
     public static PromotionSpecific of(Integer buy, Integer get) {
+        if (buy <= 0 || get < 0) {
+            throw new IllegalArgumentException();
+        }
         return new PromotionSpecific(buy, get);
     }
 }
