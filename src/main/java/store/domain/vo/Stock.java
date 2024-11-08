@@ -25,6 +25,12 @@ public class Stock {
     }
 
     public void decrease(int amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException();
+        }
+        if (this.quantity < amount) {
+            throw new IllegalArgumentException();
+        }
         this.quantity -= amount;
     }
 }
