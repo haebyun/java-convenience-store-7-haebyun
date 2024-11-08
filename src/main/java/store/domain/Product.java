@@ -35,4 +35,8 @@ public class Product {
     public String getPromotionName() {
         return promotionName;
     }
+
+    public void decreaseStock(Integer quantity) {
+        this.stock.decrease(quantity);
+    }
 }
