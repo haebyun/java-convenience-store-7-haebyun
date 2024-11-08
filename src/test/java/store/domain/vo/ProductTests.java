@@ -1,9 +1,10 @@
-package store.domain;
+package store.domain.vo;
 
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import store.domain.product.vo.Product;
 
 public class ProductTests {
 
@@ -17,7 +18,7 @@ public class ProductTests {
         Product product = Product.of(productName, productPrice, promotionName);
 
         assertThat(product.getName()).isEqualTo(productName);
-        assertThat(product.getPrice()).isEqualTo(productPrice);
+        assertThat(product.getPriceValue()).isEqualTo(productPrice);
         assertThat(product.getPromotionName()).isEqualTo(promotionName);
     }
 }
