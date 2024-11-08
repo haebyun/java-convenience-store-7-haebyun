@@ -1,6 +1,7 @@
 package store.domain.vo;
 
 import java.time.LocalDate;
+import store.exception.ErrorMessage;
 
 public class Period {
     private final LocalDate startDate;
@@ -13,7 +14,7 @@ public class Period {
 
     public static Period of(LocalDate startDate, LocalDate endDate) {
         if (endDate.isBefore(startDate)) {
-            throw new IllegalArgumentException("종료일은 시작일보다 이후여야 합니다.");
+            throw new IllegalArgumentException(ErrorMessage.INVALID_PERIOD_SETTING.getMessage());
         }
         return new Period(startDate, endDate);
     }
