@@ -24,13 +24,13 @@ public class Stock {
         return quantity;
     }
 
-    public void decrease(int amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_DECREASE_STOCK_AMOUNT.getMessage());
+    public void decrease(Integer quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_DECREASE_STOCK_QUANTITY.getMessage());
         }
-        if (this.quantity < amount) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_DECREASE_STOCK_AMOUNT.getMessage());
+        if (this.quantity < quantity) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_DECREASE_STOCK_QUANTITY.getMessage());
         }
-        this.quantity -= amount;
+        this.quantity -= quantity;
     }
 }

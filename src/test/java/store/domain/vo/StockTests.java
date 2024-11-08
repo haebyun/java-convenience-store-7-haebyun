@@ -29,33 +29,33 @@ public class StockTests {
     @ParameterizedTest
     @ValueSource(ints = {1,2,3,4,5})
     @DisplayName("재고 감소 로직이 존재한다.")
-    void testsValidDecreaseStockQuantity(int amount) {
+    void testsValidDecreaseStockQuantity(int quantity) {
         Stock stock = Stock.of(initialQuantity);
 
-        stock.decrease(amount);
+        stock.decrease(quantity);
 
-        assertThat(stock.getQuantity()).isEqualTo(initialQuantity - amount);
+        assertThat(stock.getQuantity()).isEqualTo(initialQuantity - quantity);
     }
 
     @ParameterizedTest
     @ValueSource(ints = {0, -4, -10})
     @DisplayName("재고 감소 수량이 0 이하인 경우 예외가 발생한다.")
-    void testsInvalidDecreaseStockQuantityThenThrowsException(int amount) {
+    void testsInvalidDecreaseStockQuantityThenThrowsException(int quantity) {
         Stock stock = Stock.of(initialQuantity);
 
-        assertThatThrownBy(() -> stock.decrease(amount))
+        assertThatThrownBy(() -> stock.decrease(quantity))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @ParameterizedTest
     @ValueSource(ints = {1,2,3,4,5})
     @DisplayName("재고 감소 수량이 현재 재고 수량보다 많은 경우 예외가 발생한다.")
-    void testsInvalidToLargeDecreaseStockQuantityThenThrowsException(int amount) {
+    void testsInvalidToLargeDecreaseStockQuantityThenThrowsException(int quantity) {
         Stock stock = Stock.of(initialQuantity);
 
-        int toLargeDecreaseAmount = amount + initialQuantity;
+        int toLargeDecreasequantity = quantity + initialQuantity;
 
-        assertThatThrownBy(() -> stock.decrease(toLargeDecreaseAmount))
+        assertThatThrownBy(() -> stock.decrease(toLargeDecreasequantity))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }
