@@ -1,5 +1,7 @@
 package store.domain.product.vo;
 
+import store.exception.ErrorMessage;
+
 public class Price {
     private final Integer value;
 
@@ -13,8 +15,8 @@ public class Price {
     }
 
     private static void validate(Integer value) {
-        if(value<=0) {
-            throw new IllegalArgumentException("상품의 가격은 양수만 허용됩니다.");
+        if (value <= 0) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_PRICE.getMessage());
         }
     }
 
