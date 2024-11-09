@@ -15,7 +15,7 @@ public class Stock {
     }
 
     static void validate(Integer quantity) {
-        if(quantity < 0) {
+        if (quantity < 0) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_STOCK_QUANTITY.getMessage());
         }
     }

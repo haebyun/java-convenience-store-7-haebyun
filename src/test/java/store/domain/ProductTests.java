@@ -26,7 +26,7 @@ public class ProductTests {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {1,2,3,4,5})
+    @ValueSource(ints = {1, 2, 3, 4, 5})
     @DisplayName("재고 감소 로직을 가진다.")
     void testsDecreaseStockQuantity(Integer quantity) {
         String productName = "요아정";
@@ -41,7 +41,7 @@ public class ProductTests {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {2,3,4,5})
+    @ValueSource(ints = {2, 3, 4, 5})
     @DisplayName("재고 감소 로직을 가진다.")
     void testsToLargeDecreaseStockQuantity(Integer quantity) {
         String productName = "요아정";

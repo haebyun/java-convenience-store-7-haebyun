@@ -19,7 +19,7 @@ public class StockTests {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {-100,-10,-5,-1})
+    @ValueSource(ints = {-100, -10, -5, -1})
     @DisplayName("재고 수량은 생성될 때, 0 이상이여야 한다.")
     void testsInvalidStockQuantityThenThrowsException(int quantity) {
         assertThatThrownBy(() -> Stock.of(quantity))
@@ -27,7 +27,7 @@ public class StockTests {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {1,2,3,4,5})
+    @ValueSource(ints = {1, 2, 3, 4, 5})
     @DisplayName("재고 감소 로직이 존재한다.")
     void testsValidDecreaseStockQuantity(int quantity) {
         Stock stock = Stock.of(initialQuantity);
@@ -48,7 +48,7 @@ public class StockTests {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {1,2,3,4,5})
+    @ValueSource(ints = {1, 2, 3, 4, 5})
     @DisplayName("재고 감소 수량이 현재 재고 수량보다 많은 경우 예외가 발생한다.")
     void testsInvalidToLargeDecreaseStockQuantityThenThrowsException(int quantity) {
         Stock stock = Stock.of(initialQuantity);
