@@ -1,5 +1,6 @@
 package store.domain;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class Products {
@@ -24,5 +25,17 @@ public class Products {
     public Boolean isPromotionProductExist(String productName) {
         return products.stream()
                 .anyMatch(product -> productName.equals(product.getName()) && product.hasPromotion());
+    }
+
+    public void updateProductStock(String productName, Integer quantity) {
+        List<Product> matchedProducts = products.stream()
+                .filter(product -> productName.equals(product.getName()))
+                .sorted(Comparator.comparing(Product::hasPromotion).reversed())
+                .toList();
+        for (Product product : matchedProducts) {
+            if (quantity > 0) {
+                quantity = product.decreaseStock(quantity);
+            }
+        }
     }
 }
