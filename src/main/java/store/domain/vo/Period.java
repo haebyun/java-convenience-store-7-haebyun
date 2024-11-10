@@ -19,7 +19,7 @@ public class Period {
         return new Period(startDate, endDate);
     }
 
-    public boolean isWithinPeriod(LocalDate date) {
+    public Boolean isWithinPeriod(LocalDate date) {
         return (date.isEqual(startDate) || date.isAfter(startDate)) &&
                 (date.isEqual(endDate) || date.isBefore(endDate));
     }
