@@ -16,7 +16,7 @@ public class Product {
         this.promotionName = promotionName;
     }
 
-    public static Product of(String name, Integer price, Integer stockQuantity, String promotionName) {
+    public static Product from(String name, Integer price, Integer stockQuantity, String promotionName) {
         return new Product(name, Price.of(price), Stock.of(stockQuantity), promotionName);
     }
 

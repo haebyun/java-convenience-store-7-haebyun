@@ -17,7 +17,7 @@ public class ProductTests {
         Integer stockQuantity = 100;
         String promotionName = "2+1";
 
-        Product product = Product.of(productName, productPrice, stockQuantity, promotionName);
+        Product product = Product.from(productName, productPrice, stockQuantity, promotionName);
 
         assertThat(product.getName()).isEqualTo(productName);
         assertThat(product.getPriceValue()).isEqualTo(productPrice);
@@ -34,7 +34,7 @@ public class ProductTests {
         Integer stockInitialQuantity = 100;
         String promotionName = "2+1";
 
-        Product product = Product.of(productName, productPrice, stockInitialQuantity, promotionName);
+        Product product = Product.from(productName, productPrice, stockInitialQuantity, promotionName);
         product.decreaseStock(quantity);
 
         assertThat(product.getStockValue()).isEqualTo(stockInitialQuantity - quantity);
@@ -49,7 +49,7 @@ public class ProductTests {
         Integer stockInitialQuantity = 1;
         String promotionName = "2+1";
 
-        Product product = Product.of(productName, productPrice, stockInitialQuantity, promotionName);
+        Product product = Product.from(productName, productPrice, stockInitialQuantity, promotionName);
 
         assertThatThrownBy(() -> product.decreaseStock(quantity))
                 .isInstanceOf(IllegalArgumentException.class);
