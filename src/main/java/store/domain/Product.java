@@ -39,4 +39,13 @@ public class Product {
     public Boolean hasPromotion() {
         return !this.promotionName.equals("No Promotion");
     }
+
+    public Integer decreaseStock(Integer quantity) {
+        int availableQuantity = stock.getQuantity();
+        int decreaseQuantity = Math.min(availableQuantity, quantity);
+
+        stock.decrease(decreaseQuantity);
+
+        return quantity - decreaseQuantity;
+    }
 }
