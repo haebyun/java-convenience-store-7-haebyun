@@ -36,7 +36,7 @@ public class Product {
         return promotionName;
     }
 
-    public void decreaseStock(Integer quantity) {
-        this.stock.decrease(quantity);
+    public Boolean hasPromotion() {
+        return !this.promotionName.equals("No Promotion");
     }
 }
