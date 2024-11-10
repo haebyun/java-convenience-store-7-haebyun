@@ -12,4 +12,12 @@ public class Products {
     public static Products of(List<Product> products) {
         return new Products(products);
     }
+
+    public Boolean isOverStock(String productName, Integer orderQuantity) {
+        int productTotalStock = products.stream()
+                .filter(product -> productName.equals(product.getName()))
+                .mapToInt(Product::getStockValue)
+                .sum();
+        return productTotalStock < orderQuantity;
+    }
 }
