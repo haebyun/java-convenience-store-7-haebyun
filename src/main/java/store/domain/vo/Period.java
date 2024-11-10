@@ -14,7 +14,7 @@ public class Period {
 
     public static Period of(LocalDate startDate, LocalDate endDate) {
         if (endDate.isBefore(startDate)) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_PERIOD_SETTING.getMessage());
+            throw new IllegalArgumentException(ErrorMessage.OTHER_INVALID_INPUT.getMessage());
         }
         return new Period(startDate, endDate);
     }

@@ -16,7 +16,7 @@ public class Stock {
 
     static void validate(Integer quantity) {
         if (quantity < 0) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_STOCK_QUANTITY.getMessage());
+            throw new IllegalArgumentException(ErrorMessage.OTHER_INVALID_INPUT.getMessage());
         }
     }
 
@@ -26,10 +26,10 @@ public class Stock {
 
     public void decrease(Integer quantity) {
         if (quantity <= 0) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_DECREASE_STOCK_QUANTITY.getMessage());
+            throw new IllegalArgumentException(ErrorMessage.OTHER_INVALID_INPUT.getMessage());
         }
         if (this.quantity < quantity) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_DECREASE_STOCK_QUANTITY.getMessage());
+            throw new IllegalArgumentException(ErrorMessage.OTHER_INVALID_INPUT.getMessage());
         }
         this.quantity -= quantity;
     }

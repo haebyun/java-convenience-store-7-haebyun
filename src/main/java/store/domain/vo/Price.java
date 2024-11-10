@@ -16,7 +16,7 @@ public class Price {
 
     private static void validate(Integer value) {
         if (value <= 0) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_PRICE.getMessage());
+            throw new IllegalArgumentException(ErrorMessage.OTHER_INVALID_INPUT.getMessage());
         }
     }
 

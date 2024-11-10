@@ -13,7 +13,7 @@ public class PromotionSpecific {
 
     public static PromotionSpecific of(Integer buy, Integer get) {
         if (buy <= 0 || get < 0) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_PROMOTION_SPECIFIC_SETTING.getMessage());
+            throw new IllegalArgumentException(ErrorMessage.OTHER_INVALID_INPUT.getMessage());
         }
         return new PromotionSpecific(buy, get);
     }
