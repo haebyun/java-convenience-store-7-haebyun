@@ -20,4 +20,9 @@ public class Products {
                 .sum();
         return productTotalStock < orderQuantity;
     }
+
+    public Boolean isPromotionProductExist(String productName) {
+        return products.stream()
+                .anyMatch(product -> productName.equals(product.getName()) && product.hasPromotion());
+    }
 }
