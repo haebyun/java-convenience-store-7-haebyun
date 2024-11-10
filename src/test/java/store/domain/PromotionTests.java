@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import store.domain.vo.Period;
-import store.domain.vo.PromotionSpecific;
 
 public class PromotionTests {
 
@@ -18,11 +16,7 @@ public class PromotionTests {
         LocalDate startDate = LocalDate.parse("2024-01-01");
         LocalDate endDate = LocalDate.parse("2024-12-31");
 
-        Promotion promotion = Promotion.of(
-                promotionName,
-                PromotionSpecific.of(buy, get),
-                Period.of(startDate, endDate)
-        );
+        Promotion promotion = Promotion.from(promotionName, buy, get, startDate, endDate);
 
         Assertions.assertThat(promotion).isNotNull();
     }
