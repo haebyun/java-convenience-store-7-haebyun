@@ -2,6 +2,7 @@ package store.domain;
 
 import java.util.Comparator;
 import java.util.List;
+import store.domain.vo.PromotionProductInfo;
 
 public class Products {
     private final List<Product> products;
@@ -37,5 +38,13 @@ public class Products {
                 quantity = product.decreaseStock(quantity);
             }
         }
+    }
+
+    public PromotionProductInfo getPromotionProductInfo(String productName) {
+        Product promotionProduct = products.stream()
+                .filter(product -> product.hasPromotion() && productName.equals(product.getName()))
+                .findAny()
+                .orElseThrow(IllegalArgumentException::new);
+        return PromotionProductInfo.from(promotionProduct);
     }
 }
