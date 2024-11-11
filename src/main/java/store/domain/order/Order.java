@@ -16,7 +16,10 @@ public class Order {
     }
 
     public static Order of(List<OrderLine> orderLines, List<PromotionLine> promotionLines) {
-        return new Order(orderLines, promotionLines);
+        List<PromotionLine> filteredPromotionLines = promotionLines.stream()
+                .filter(promotionLine -> promotionLine.getFreeQuantity() > 0)
+                .toList();
+        return new Order(orderLines, filteredPromotionLines);
     }
 
     public Integer calculateTotalAmountOfOrder() {
