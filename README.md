@@ -77,8 +77,17 @@
     - [ ] 고객의 구매 상품 내역(구매한 상품명, 수량, 가격)을 갖는다.
     - [ ] 증정 상품 내역을 갖는다.
 
+- 상품 정보 로더(ProductDataLoader)
+    - [ ] src/main/resources/products.md 파일을 이용하여 상품 정보를 받는다.
+        - [ ] List<ProductDTO> 형태로 반환하는 것을 목표로 한다.
+        - [ ] 만약 PromotionName이 'null'인 경우 "No Promotion"을 저장한다.
+
+- 프로모션 정보 로더(PromotionDataLoader)
+  - [ ] src/main/resources/promotions.md 파일을 이용하여 프로모션 정보를 받는다.
+    - [ ] List<PromotionDTO> 형태로 반환하는 것을 목표로 한다.
+
+
 - 입력
-    - [ ] src/main/resources/products.md과 src/main/resources/promotions.md 파일을 이용하여 상품 정보와 프로모션 정보를 받는다.
     - [ ] 구매할 상품과 수량을 입력 받는다. 상품명, 수량은 하이픈(-)으로, 개별 상품은 대괄호([])로 묶어 쉼표(,)로 구분한다.
     - [ ] 프로모션 적용이 가능한 상품에 대해 고객이 해당 수량보다 적게 가져온 경우, 그 수량만큼 추가 여부를 입력받는다. (Y/N)
     - [ ] 프로모션 재고가 부족하여 일부 수량을 프로모션 혜택 없이 결제해야 하는 경우, 일부 수량에 대해 정가로 결제할지 여부를 입력받는다. (Y/N)
