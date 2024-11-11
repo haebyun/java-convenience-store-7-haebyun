@@ -38,4 +38,8 @@ public class PromotionSpecific {
         }
         return (orderQuantity + get) % (buy + get) == 0;
     }
+
+    public Integer getRemainingStock(Integer quantity) {
+        return quantity % (buy + get);
+    }
 }
