@@ -42,4 +42,12 @@ public class PromotionSpecific {
     public Integer getRemainingStock(Integer quantity) {
         return quantity % (buy + get);
     }
+
+    public Integer getAppliedQuantity(Integer promotionStock, Integer orderQuantity) {
+        int total = buy + get;
+        if (orderQuantity < promotionStock) {
+            return (orderQuantity / total) * total;
+        }
+        return (promotionStock / total) * total;
+    }
 }
