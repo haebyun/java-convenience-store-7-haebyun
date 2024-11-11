@@ -49,4 +49,10 @@ public class Promotions {
         int freeQuantity = promotion.calculateFreeProductCount(appliedQuantity);
         return new PromotionResult(info.name(), info.price(), appliedQuantity, freeQuantity);
     }
+
+    public Boolean isPromotionActiveOnDate(String promotionName, LocalDate orderDate) {
+        return findPromotionByName(promotionName)
+                .map(promotion -> promotion.isActive(orderDate))
+                .orElse(false);
+    }
 }
