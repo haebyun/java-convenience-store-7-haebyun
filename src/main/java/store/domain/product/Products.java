@@ -69,4 +69,12 @@ public class Products {
         return products.stream()
                 .anyMatch(product -> productName.equals(product.getName()));
     }
+
+    public String findPromotionNameByProductName(String productName) {
+        return products.stream()
+                .filter(product -> productName.equals(product.getName()) && product.hasPromotion())
+                .map(Product::getPromotionName)
+                .findFirst()
+                .orElse("No Promotion");
+    }
 }
