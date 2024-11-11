@@ -37,4 +37,8 @@ public class Promotion {
     public Integer calculateFreeProductCount(Integer promotionAppliedProductQuantity) {
         return promotionSpecific.getFreeCount(promotionAppliedProductQuantity);
     }
+
+    public Integer calculateAppliedPromotionQuantity(Integer orderQuantity, Integer promotionStock) {
+        return promotionSpecific.getAppliedQuantity(promotionStock, orderQuantity);
+    }
 }
