@@ -5,6 +5,7 @@ import camp.nextstep.edu.missionutils.DateTimes;
 import java.util.List;
 import store.dto.request.OrderRequestDTO;
 import store.dto.request.OrderRequestsDTO;
+import store.dto.request.UserOptionDTO;
 import store.view.input.parser.InputParser;
 
 public class ConsoleInputView implements InputView {
@@ -20,5 +21,12 @@ public class ConsoleInputView implements InputView {
         String response = Console.readLine();
         List<OrderRequestDTO> orderRequestDTOs = InputParser.parseOrderRequests(response);
         return OrderRequestsDTO.of(orderRequestDTOs, DateTimes.now().toLocalDate());
+    }
+
+    @Override
+    public UserOptionDTO inputAddFreeStockOption(String productName, int additionalQuantity) {
+        System.out.printf(REQUEST_ADD_FREE_STOCK_OPTION, productName, additionalQuantity);
+        String response = Console.readLine();
+        return UserOptionDTO.of(response);
     }
 }
