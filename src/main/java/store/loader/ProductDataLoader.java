@@ -12,6 +12,7 @@ import store.exception.ErrorMessage;
 public class ProductDataLoader {
     private static final String NO_PROMOTION = "No Promotion";
     private static final String DELIMITER = ",";
+    private static final String NULL = "null";
 
     public List<ProductDTO> loadProducts(String fileName) {
         try (BufferedReader reader = createBufferedReader(fileName)) {
@@ -61,7 +62,7 @@ public class ProductDataLoader {
     }
 
     private String parsePromotion(String promotion) {
-        if (promotion.equalsIgnoreCase("null") || promotion.isEmpty()) {
+        if (promotion.equalsIgnoreCase(NULL) || promotion.isEmpty()) {
             return NO_PROMOTION;
         }
         return promotion;

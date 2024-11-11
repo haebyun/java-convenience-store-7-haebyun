@@ -11,6 +11,8 @@ import store.dto.file.PromotionDTO;
 import store.exception.ErrorMessage;
 
 public class PromotionDataLoader {
+    private static final String DELIMITER = ",";
+
     public List<PromotionDTO> loadPromotions(String fileName) {
         try (BufferedReader reader = createBufferedReader(fileName)) {
             return readPromotionData(reader);
@@ -31,26 +33,21 @@ public class PromotionDataLoader {
     private List<PromotionDTO> readPromotionData(BufferedReader reader) throws IOException {
         List<PromotionDTO> promotionDTOs = new ArrayList<>();
         String line;
-        boolean isFirstLine = true;
+        reader.readLine();
         while ((line = reader.readLine()) != null) {
-            if (isFirstLine) {
-                isFirstLine = false;
-                continue;
-            }
             promotionDTOs.add(parsePromotion(line));
         }
         return promotionDTOs;
     }
 
     private PromotionDTO parsePromotion(String line) {
-        String[] parts = line.split(",", -1);
-
-        String name = parts[0].trim();
-        int buy = Integer.parseInt(parts[1].trim());
-        int get = Integer.parseInt(parts[2].trim());
-        LocalDate startDate = LocalDate.parse(parts[3].trim());
-        LocalDate endDate = LocalDate.parse(parts[4].trim());
-
-        return PromotionDTO.of(name, buy, get, startDate, endDate);
+        String[] parts = line.split(DELIMITER, -1);
+        return PromotionDTO.of(
+                parts[0].trim(),
+                Integer.parseInt(parts[1].trim()),
+                Integer.parseInt(parts[2].trim()),
+                LocalDate.parse(parts[3].trim()),
+                LocalDate.parse(parts[4].trim())
+        );
     }
 }
