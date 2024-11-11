@@ -43,4 +43,11 @@ public class ConsoleInputView implements InputView {
         String response = Console.readLine();
         return UserOptionDTO.of(response);
     }
+
+    @Override
+    public UserOptionDTO inputOrderRepeatOption() {
+        System.out.println(REQUEST_ORDER_REPEAT_OPTION);
+        String response = Console.readLine();
+        return UserOptionDTO.of(response);
+    }
 }
