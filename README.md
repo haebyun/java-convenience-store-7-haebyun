@@ -83,8 +83,8 @@
         - [x] 만약 PromotionName이 'null'인 경우 "No Promotion"을 저장한다.
 
 - 프로모션 정보 로더(PromotionDataLoader)
-  - [ ] src/main/resources/promotions.md 파일을 이용하여 프로모션 정보를 받는다.
-    - [ ] List<PromotionDTO> 형태로 반환하는 것을 목표로 한다.
+  - [x] src/main/resources/promotions.md 파일을 이용하여 프로모션 정보를 받는다.
+    - [x] List<PromotionDTO> 형태로 반환하는 것을 목표로 한다.
 
 
 - 입력
