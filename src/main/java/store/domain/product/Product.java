@@ -1,7 +1,7 @@
-package store.domain;
+package store.domain.product;
 
-import store.domain.vo.Price;
-import store.domain.vo.Stock;
+import store.domain.product.vo.Price;
+import store.domain.product.vo.Stock;
 
 public class Product {
     private final String name;

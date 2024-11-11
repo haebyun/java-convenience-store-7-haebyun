@@ -1,4 +1,4 @@
-package store.domain.vo;
+package store.domain.promotion.vo;
 
 import java.time.LocalDate;
 import store.exception.ErrorMessage;

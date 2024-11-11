@@ -1,6 +1,6 @@
 package store.domain.vo;
 
-import store.domain.Product;
+import store.domain.product.Product;
 
 public record PromotionProductInfo(
         String name,

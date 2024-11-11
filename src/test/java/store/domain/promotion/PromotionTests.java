@@ -1,4 +1,4 @@
-package store.domain;
+package store.domain.promotion;
 
 import static org.assertj.core.api.Assertions.*;
 

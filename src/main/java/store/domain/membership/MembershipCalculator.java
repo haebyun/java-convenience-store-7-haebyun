@@ -1,4 +1,4 @@
-package store.domain;
+package store.domain.membership;
 
 import store.domain.order.Order;
 

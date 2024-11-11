@@ -1,5 +1,6 @@
-package store.domain;
+package store.domain.product;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import store.domain.vo.PromotionProductInfo;
@@ -58,5 +59,9 @@ public class Products {
                 .map(Product::getPriceValue)
                 .findAny()
                 .orElseThrow(IllegalArgumentException::new);
+    }
+
+    public List<Product> getProducts() {
+        return Collections.unmodifiableList(products);
     }
 }

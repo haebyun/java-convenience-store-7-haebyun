@@ -1,8 +1,8 @@
-package store.domain;
+package store.domain.promotion;
 
 import java.time.LocalDate;
-import store.domain.vo.Period;
-import store.domain.vo.PromotionSpecific;
+import store.domain.promotion.vo.Period;
+import store.domain.promotion.vo.PromotionSpecific;
 
 public class Promotion {
     private final String name;

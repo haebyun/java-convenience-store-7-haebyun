@@ -1,4 +1,4 @@
-package store.domain.vo;
+package store.domain.product.vo;
 
 import store.exception.ErrorMessage;
 

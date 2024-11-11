@@ -1,4 +1,4 @@
-package store.domain.vo;
+package store.domain.product.vo;
 
 import static org.assertj.core.api.Assertions.*;
 
