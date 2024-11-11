@@ -29,4 +29,11 @@ public class ConsoleInputView implements InputView {
         String response = Console.readLine();
         return UserOptionDTO.of(response);
     }
+
+    @Override
+    public UserOptionDTO inputPurchaseFullPayOption(String productName, int nonPromotionQuantity) {
+        System.out.printf(REQUEST_PURCHASE_FULL_PAY_OPTION, productName, nonPromotionQuantity);
+        String response = Console.readLine();
+        return UserOptionDTO.of(response);
+    }
 }
