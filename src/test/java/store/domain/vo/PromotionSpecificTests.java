@@ -57,4 +57,22 @@ public class PromotionSpecificTests {
 
         assertThat(bonus).isEqualTo(0);
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "2, 1, 10, 5, 1",
+            "2, 1, 2, 1, 0",
+            "3, 2, 15, 8, 2",
+            "1, 1, 10, 9, 1",
+            "2, 1, 5, 2, 1",
+            "2, 1, 3, 2, 1"
+    })
+    @DisplayName("무료상품을 받을 수 있는 상태이면 몇 개 더 가져오면 받을 수 있는 지 반환")
+    void testsGetAdditionalFreeItems(int buy, int get, int promotionStock, int orderQuantity, int expectedAdditionalFreeItems) {
+        PromotionSpecific promotionSpecific = PromotionSpecific.of(buy, get);
+
+        int additionalFreeItems = promotionSpecific.getAdditionalFreeItems(promotionStock, orderQuantity);
+
+        assertThat(additionalFreeItems).isEqualTo(expectedAdditionalFreeItems);
+    }
 }
