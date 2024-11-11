@@ -51,6 +51,6 @@ public class PromotionDataLoader {
         LocalDate startDate = LocalDate.parse(parts[3].trim());
         LocalDate endDate = LocalDate.parse(parts[4].trim());
 
-        return new PromotionDTO(name, buy, get, startDate, endDate);
+        return PromotionDTO.of(name, buy, get, startDate, endDate);
     }
 }

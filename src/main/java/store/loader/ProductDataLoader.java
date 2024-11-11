@@ -51,6 +51,6 @@ public class ProductDataLoader {
         if (promotion.equalsIgnoreCase("null") || promotion.isEmpty()) {
             promotion = "No Promotion";
         }
-        return new ProductDTO(name, price, quantity, promotion);
+        return ProductDTO.of(name, price, quantity, promotion);
     }
 }
