@@ -34,4 +34,10 @@ public class Order {
     public Integer calculateMembershipTargetAmount() {
         return calculateTotalAmountOfOrder() - calculateTotalAmountOfPromotionApplied();
     }
+
+    public Integer calculateTotalOrderQuantity() {
+        return orderLines.stream()
+                .mapToInt(OrderLine::getQuantity)
+                .sum();
+    }
 }
