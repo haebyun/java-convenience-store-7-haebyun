@@ -6,6 +6,7 @@ import java.util.List;
 import store.domain.membership.MembershipCalculator;
 import store.domain.order.Order;
 import store.domain.order.vo.OrderLine;
+import store.domain.order.vo.OrderResult;
 import store.domain.order.vo.PromotionLine;
 import store.domain.product.Products;
 import store.domain.promotion.Promotions;
@@ -44,6 +45,32 @@ public class OrderController {
         this.productDataLoader = productDataLoader;
         this.promotionDataLoader = promotionDataLoader;
         this.membershipCalculator = membershipCalculator;
+    }
+
+    public void run() {
+        Products products = OrderMapper.toProductsDomain(productDataLoader.loadProducts("products.md"));
+        Promotions promotions = OrderMapper.toPromotionsDomain(promotionDataLoader.loadPromotions("promotions.md"));
+
+        Repeater.executeWhileTrue(() -> {
+            outputView.printProductsStocks(products);
+            List<OrderResult> orderResults = processOrderCycle(products, promotions);
+            for (OrderResult orderResult : orderResults) {
+                products.updateProductStock(orderResult.productName(), orderResult.quantity());
+            }
+        }, this::shouldTerminateLoop);
+    }
+
+    private List<OrderResult> processOrderCycle(Products products, Promotions promotions) {
+        OrderRequests orderRequests = getValidOrderRequests(products);
+        Order order = processOrder(orderRequests, products, promotions);
+        Integer membershipDiscountAmount = applyMembership(order);
+        outputView.printReceipt(order, membershipDiscountAmount);
+        return order.createOrderResult();
+    }
+
+    private boolean shouldTerminateLoop() {
+        UserOption userResponse = getValidOrderRepeatOption();
+        return userResponse.isNo();
     }
 
     private Order processOrder(OrderRequests orderRequests, Products products, Promotions promotions) {
