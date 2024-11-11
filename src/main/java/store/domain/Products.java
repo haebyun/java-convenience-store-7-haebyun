@@ -51,4 +51,12 @@ public class Products {
                 .orElseThrow(IllegalArgumentException::new);
         return PromotionProductInfo.from(promotionProduct);
     }
+
+    public Integer findPriceByName(String productName) {
+        return products.stream()
+                .filter(product -> product.getName().equals(productName))
+                .map(Product::getPriceValue)
+                .findAny()
+                .orElseThrow(IllegalArgumentException::new);
+    }
 }
