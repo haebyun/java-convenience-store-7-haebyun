@@ -10,9 +10,13 @@ public class Order {
     private final List<OrderLine> orderLines;
     private final List<PromotionLine> promotionLines;
 
-    public Order(List<OrderLine> orderLines, List<PromotionLine> promotionLines) {
+    private Order(List<OrderLine> orderLines, List<PromotionLine> promotionLines) {
         this.orderLines = orderLines;
         this.promotionLines = promotionLines;
+    }
+
+    public static Order of(List<OrderLine> orderLines, List<PromotionLine> promotionLines) {
+        return new Order(orderLines, promotionLines);
     }
 
     public Integer calculateTotalAmountOfOrder() {
