@@ -2,6 +2,7 @@ package store.controller;
 
 import java.time.LocalDate;
 import store.domain.membership.MembershipCalculator;
+import store.domain.order.Order;
 import store.domain.order.vo.PromotionLine;
 import store.domain.product.Products;
 import store.domain.promotion.Promotions;
@@ -95,6 +96,14 @@ public class OrderController {
                 promotionResult.appliedProductQuantity(),
                 promotionResult.freeQuantity()
         );
+    }
+
+    private Integer applyMembership(Order order) {
+        UserOption membershipOption = getValidMembershipOption();
+        if (membershipOption.isYes()) {
+            return membershipCalculator.calculateMembershipDiscount(order);
+        }
+        return 0;
     }
 
     private OrderRequests getValidOrderRequests(Products products) {
