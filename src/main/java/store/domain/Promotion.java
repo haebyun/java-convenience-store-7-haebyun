@@ -26,4 +26,11 @@ public class Promotion {
     public Integer getAdditionalFreeItemCount(Integer promotionStock, Integer orderQuantity) {
         return promotionSpecific.getAdditionalFreeItems(promotionStock, orderQuantity);
     }
+
+    public Integer calculateNonPromotionQuantity(Integer promotionStock, Integer orderQuantity) {
+        if (orderQuantity > promotionStock) {
+            return orderQuantity - promotionStock + promotionSpecific.getRemainingStock(promotionStock);
+        }
+        return promotionSpecific.getRemainingStock(orderQuantity);
+    }//4개가 프로모션 재고, 프로모션은 2+1, 8개 주문 -> 5개 리턴
 }
