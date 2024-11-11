@@ -3,6 +3,7 @@ package store.domain;
 import java.util.Comparator;
 import java.util.List;
 import store.domain.vo.PromotionProductInfo;
+import store.exception.ErrorMessage;
 
 public class Products {
     private final List<Product> products;
@@ -29,6 +30,9 @@ public class Products {
     }
 
     public void updateProductStock(String productName, Integer quantity) {
+        if (isOverStock(productName, quantity)) {
+            throw new IllegalStateException(ErrorMessage.EXCEED_STOCK_QUANTITY.getMessage());
+        }
         List<Product> matchedProducts = products.stream()
                 .filter(product -> productName.equals(product.getName()))
                 .sorted(Comparator.comparing(Product::hasPromotion).reversed())
