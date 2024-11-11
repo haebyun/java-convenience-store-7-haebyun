@@ -78,9 +78,9 @@
     - [ ] 증정 상품 내역을 갖는다.
 
 - 상품 정보 로더(ProductDataLoader)
-    - [ ] src/main/resources/products.md 파일을 이용하여 상품 정보를 받는다.
-        - [ ] List<ProductDTO> 형태로 반환하는 것을 목표로 한다.
-        - [ ] 만약 PromotionName이 'null'인 경우 "No Promotion"을 저장한다.
+    - [x] src/main/resources/products.md 파일을 이용하여 상품 정보를 받는다.
+        - [x] List<ProductDTO> 형태로 반환하는 것을 목표로 한다.
+        - [x] 만약 PromotionName이 'null'인 경우 "No Promotion"을 저장한다.
 
 - 프로모션 정보 로더(PromotionDataLoader)
   - [ ] src/main/resources/promotions.md 파일을 이용하여 프로모션 정보를 받는다.
