@@ -64,4 +64,9 @@ public class Products {
     public List<Product> getProducts() {
         return Collections.unmodifiableList(products);
     }
+
+    public Boolean existProductByName(String productName) {
+        return products.stream()
+                .anyMatch(product -> productName.equals(product.getName()));
+    }
 }
