@@ -89,4 +89,20 @@ public class PromotionSpecificTests {
         int remainingStock = promotionSpecific.getRemainingStock(quantity);
         assertThat(remainingStock).isEqualTo(expectedRemainingStock);
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "2, 1, 10, 4, 3",
+            "2, 1, 2, 1, 0",
+            "3, 2, 15, 6, 5",
+            "1, 1, 10, 8, 8",
+            "2, 1, 5, 3, 3",
+            "2, 1, 3, 2, 0"
+    })
+    @DisplayName("프로모션이 적용된 상품 갯수를 구한다.")
+    void testGetAppliedQuantity(int buy, int get, int promotionStock, int orderQuantity, int expectedAppliedQuantity) {
+        PromotionSpecific promotionSpecific = PromotionSpecific.of(buy, get);
+        int appliedQuantity = promotionSpecific.getAppliedQuantity(promotionStock, orderQuantity);
+        assertThat(appliedQuantity).isEqualTo(expectedAppliedQuantity);
+    }
 }
