@@ -1,7 +1,9 @@
 package store.domain.order;
 
+import java.util.Collections;
 import java.util.List;
 import store.domain.order.vo.OrderLine;
+import store.domain.order.vo.OrderResult;
 import store.domain.order.vo.PromotionLine;
 
 public class Order {
@@ -39,5 +41,19 @@ public class Order {
         return orderLines.stream()
                 .mapToInt(OrderLine::getQuantity)
                 .sum();
+    }
+
+    public List<OrderResult> createOrderResult() {
+        return orderLines.stream()
+                .map(orderLine -> OrderResult.of(orderLine.getProductName(), orderLine.getQuantity()))
+                .toList();
+    }
+
+    public List<OrderLine> getOrderLines() {
+        return Collections.unmodifiableList(orderLines);
+    }
+
+    public List<PromotionLine> getPromotionLines() {
+        return Collections.unmodifiableList(promotionLines);
     }
 }
