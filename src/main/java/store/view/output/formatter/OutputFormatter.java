@@ -1,5 +1,6 @@
 package store.view.output.formatter;
 
+import java.util.List;
 import store.domain.order.Order;
 import store.domain.order.vo.OrderLine;
 import store.domain.order.vo.PromotionLine;
@@ -54,16 +55,14 @@ public final class OutputFormatter {
 
     public static String formatReceipt(Order order, Integer membershipDiscountAmount) {
         StringBuilder sb = new StringBuilder();
-        sb.append(RECEIPT_HEADER);
         appendOrderLines(sb, order);
-        sb.append(RECEIPT_FOOTER);
         appendPromotionLines(sb, order);
-        sb.append(RECEIPT_SEPARATOR);
         appendSummary(sb, order, membershipDiscountAmount);
         return sb.toString();
     }
 
     private static void appendOrderLines(StringBuilder sb, Order order) {
+        sb.append(RECEIPT_HEADER);
         for (OrderLine orderLine : order.getOrderLines()) {
             sb.append(formatOrderLine(orderLine));
         }
@@ -77,7 +76,12 @@ public final class OutputFormatter {
     }
 
     private static void appendPromotionLines(StringBuilder sb, Order order) {
-        for (PromotionLine promotionLine : order.getPromotionLines()) {
+        List<PromotionLine> promotionLines = order.getPromotionLines();
+        if(promotionLines.isEmpty()) {
+            return;
+        }
+        sb.append(RECEIPT_FOOTER);
+        for (PromotionLine promotionLine : promotionLines) {
             sb.append(formatPromotionLine(promotionLine));
         }
     }
@@ -89,6 +93,7 @@ public final class OutputFormatter {
     }
 
     private static void appendSummary(StringBuilder sb, Order order, Integer membershipDiscountAmount) {
+        sb.append(RECEIPT_SEPARATOR);
         int totalOrderQuantity = order.calculateTotalOrderQuantity();
         int totalOrderAmount = order.calculateTotalAmountOfOrder();
         int totalPromotionDiscount = order.calculateTotalAmountOfPromotion();
