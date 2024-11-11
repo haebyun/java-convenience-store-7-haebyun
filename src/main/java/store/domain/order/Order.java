@@ -18,4 +18,10 @@ public class Order {
                 .mapToInt(OrderLine::calculateOrderLinePrice)
                 .sum();
     }
+
+    public Integer calculateTotalAmountOfPromotion() {
+        return promotionLines.stream()
+                .mapToInt(PromotionLine::calculatePromotionAmount)
+                .sum();
+    }
 }
