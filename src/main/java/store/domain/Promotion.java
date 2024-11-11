@@ -41,4 +41,8 @@ public class Promotion {
     public Integer calculateAppliedPromotionQuantity(Integer orderQuantity, Integer promotionStock) {
         return promotionSpecific.getAppliedQuantity(promotionStock, orderQuantity);
     }
+
+    public String getName() {
+        return name;
+    }
 }
