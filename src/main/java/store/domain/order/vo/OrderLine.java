@@ -5,10 +5,14 @@ public class OrderLine {
     private final Integer quantity;
     private final Integer pricePerProduct;
 
-    public OrderLine(String productName, Integer quantity, Integer pricePerProduct) {
+    private OrderLine(String productName, Integer quantity, Integer pricePerProduct) {
         this.productName = productName;
         this.quantity = quantity;
         this.pricePerProduct = pricePerProduct;
+    }
+
+    public static OrderLine of(String productName, Integer quantity, Integer pricePerProduct) {
+        return new OrderLine(productName, quantity, pricePerProduct);
     }
 
     public Integer calculateOrderLinePrice() {

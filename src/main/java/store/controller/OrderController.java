@@ -180,17 +180,13 @@ public class OrderController {
                                           Promotions promotions, LocalDate orderDate) {
         PromotionResult result = promotions.createPromotionResult(promotionProductInfo,
                 orderRequest.quantity(), orderDate);
-        return new PromotionLine(
-                result.productName(),
-                result.productPrice(),
-                result.appliedProductQuantity(),
-                result.freeQuantity()
-        );
+        return PromotionLine.of(result.productName(), result.productPrice(), result.appliedProductQuantity(),
+                result.freeQuantity());
     }
 
     private OrderLine processOrderLine(OrderRequest orderRequest, Products products) {
         Integer pricePerProduct = products.findPriceByName(orderRequest.productName());
-        return new OrderLine(orderRequest.productName(), orderRequest.quantity(),
+        return OrderLine.of(orderRequest.productName(), orderRequest.quantity(),
                 pricePerProduct);
     }
 
