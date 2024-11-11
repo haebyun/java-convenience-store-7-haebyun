@@ -1,7 +1,8 @@
 package store.domain;
 
+import static org.assertj.core.api.Assertions.*;
+
 import java.time.LocalDate;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,7 +21,7 @@ public class PromotionTests {
 
         Promotion promotion = Promotion.from(promotionName, buy, get, startDate, endDate);
 
-        Assertions.assertThat(promotion).isNotNull();
+        assertThat(promotion).isNotNull();
     }
 
     @ParameterizedTest
@@ -44,6 +45,31 @@ public class PromotionTests {
 
         boolean isActive = promotion.isActive(dateToTest);
 
-        Assertions.assertThat(isActive).isEqualTo(expected);
+        assertThat(isActive).isEqualTo(expected);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "4, 8, 2, 1, 5",
+            "4, 5, 2, 1, 2",
+            "3, 6, 2, 1, 3",
+            "5, 10, 2, 1, 7",
+            "2, 1, 2, 1, 1",
+            "2, 3, 2, 1, 3",
+            "0, 5, 2, 1, 5"
+    })
+    @DisplayName("주어진 갯수에 따라 프로모션이 적용되지 않고 남는 갯수를 반환한다.")
+    void testCalculateNonPromotionQuantity(int promotionStock, int orderQuantity, int buy, int get, int expectedNonPromoQuantity) {
+        Promotion promotion = Promotion.from(
+                "탄산 2+1",
+                buy,
+                get,
+                LocalDate.parse("2024-01-01"),
+                LocalDate.parse("2024-12-31")
+        );
+
+        int actualNonPromoQuantity = promotion.calculateNonPromotionQuantity(promotionStock, orderQuantity);
+
+        assertThat(actualNonPromoQuantity).isEqualTo(expectedNonPromoQuantity);
     }
 }
