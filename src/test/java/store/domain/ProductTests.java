@@ -27,23 +27,25 @@ public class ProductTests {
 
     @ParameterizedTest
     @ValueSource(ints = {1, 2, 3, 4, 5})
-    @DisplayName("재고 감소 로직을 가진다.")
-    void testsDecreaseStockQuantity(Integer quantity) {
+    @DisplayName("재고를 정상적으로 감소시킨다.")
+    void testDecreaseStockQuantity(int quantity) {
         String productName = "요아정";
         Integer productPrice = 2500;
         Integer stockInitialQuantity = 100;
         String promotionName = "2+1";
 
         Product product = Product.from(productName, productPrice, stockInitialQuantity, promotionName);
-        product.decreaseStock(quantity);
+
+        int remainingQuantity = product.decreaseStock(quantity);
 
         assertThat(product.getStockValue()).isEqualTo(stockInitialQuantity - quantity);
+        assertThat(remainingQuantity).isEqualTo(0); // 모든 주문 수량이 재고에서 차감되었으므로 남은 수량은 0
     }
 
     @ParameterizedTest
     @ValueSource(ints = {2, 3, 4, 5})
-    @DisplayName("재고 감소 로직을 가진다.")
-    void testsToLargeDecreaseStockQuantity(Integer quantity) {
+    @DisplayName("주문 수량이 재고를 초과할 때, 가능한 만큼만 재고를 감소시키고 남은 수량을 반환한다.")
+    void testDecreaseStockQuantityExceedingStock(int quantity) {
         String productName = "요아정";
         Integer productPrice = 2500;
         Integer stockInitialQuantity = 1;
@@ -51,7 +53,9 @@ public class ProductTests {
 
         Product product = Product.from(productName, productPrice, stockInitialQuantity, promotionName);
 
-        assertThatThrownBy(() -> product.decreaseStock(quantity))
-                .isInstanceOf(IllegalArgumentException.class);
+        int remainingQuantity = product.decreaseStock(quantity);
+
+        assertThat(product.getStockValue()).isEqualTo(0); // 재고는 모두 소진
+        assertThat(remainingQuantity).isEqualTo(quantity - stockInitialQuantity); // 남은 수량은 주문 수량에서 초기 재고를 뺀 값
     }
 }
