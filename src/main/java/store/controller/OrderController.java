@@ -3,6 +3,7 @@ package store.controller;
 import java.time.LocalDate;
 import store.domain.membership.MembershipCalculator;
 import store.domain.order.Order;
+import store.domain.order.vo.OrderLine;
 import store.domain.order.vo.PromotionLine;
 import store.domain.product.Products;
 import store.domain.promotion.Promotions;
@@ -96,6 +97,12 @@ public class OrderController {
                 promotionResult.appliedProductQuantity(),
                 promotionResult.freeQuantity()
         );
+    }
+
+    private OrderLine processOrderLine(OrderRequest orderRequest, Products products) {
+        Integer pricePerProduct = products.findPriceByName(orderRequest.productName());
+        return new OrderLine(orderRequest.productName(), orderRequest.quantity(),
+                pricePerProduct);
     }
 
     private Integer applyMembership(Order order) {
