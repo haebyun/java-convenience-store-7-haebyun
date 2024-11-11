@@ -30,4 +30,8 @@ public class Order {
                 .mapToInt(PromotionLine::calculateAmountOfPromotionApplied)
                 .sum();
     }
+
+    public Integer calculateMembershipTargetAmount() {
+        return calculateTotalAmountOfOrder() - calculateTotalAmountOfPromotionApplied();
+    }
 }
