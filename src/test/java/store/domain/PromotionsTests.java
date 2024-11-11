@@ -10,6 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import store.domain.vo.PromotionData;
 import store.domain.vo.PromotionProductInfo;
+import store.domain.vo.PromotionResult;
 
 public class PromotionsTests {
     @ParameterizedTest
@@ -22,7 +23,7 @@ public class PromotionsTests {
     })
     @DisplayName("프로모션이 존재하고 활성 상태일 때, 올바른 PromotionData를 반환한다.")
     void testsCreatePromotionDataActivePromotion(int promotionStock, int orderQuantity, int buy, int get,
-                                                int expectedExtraStock, int expectedNonPromoQty) {
+                                                 int expectedExtraStock, int expectedNonPromoQty) {
         Promotion promotion = Promotion.from(
                 "promotion",
                 buy,
@@ -81,5 +82,40 @@ public class PromotionsTests {
 
         PromotionData expectedData = new PromotionData(0, 0);
         assertThat(promotionData).isEqualTo(expectedData);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "8, 8, 2, 1, 6, 2",    // 8 재고, 2+1 프로모션, 8 주문 => 6 적용, 3 무료
+            "5, 5, 2, 1, 3, 1",    // 5 재고, 2+1 프로모션, 5 주문 => 3 적용, 1 무료
+            "10, 5, 2, 1, 3, 1",   // 10 재고, 2+1 프로모션, 5 주문 => 3 적용, 1 무료
+            "3, 3, 1, 1, 2, 1",     // 3 재고, 1+1 프로모션, 3 주문 => 2 적용, 1 무료
+            "7, 10, 2, 1, 6, 2"     // 7 재고, 2+1 프로모션, 10 주문 => 6 적용, 2 무료
+    })
+    @DisplayName("프로모션이 존재하고 활성 상태일 때, 올바른 PromotionResult를 반환한다.")
+    void testCreatePromotionResultActivePromotion(int promotionStock, int orderQuantity, int buy, int get,
+                                                  int expectedAppliedQuantity, int expectedFreeQuantity) {
+        Promotion promotion = Promotion.from(
+                "Active Promotion",
+                buy,
+                get,
+                LocalDate.now().minusDays(5),
+                LocalDate.now().plusDays(5)
+        );
+        Promotions promotions = Promotions.of(Collections.singletonList(promotion));
+
+        PromotionProductInfo info = new PromotionProductInfo(
+                "요아정",
+                2500,
+                promotionStock,
+                "Active Promotion"
+        );
+        LocalDate orderDate = LocalDate.now();
+
+        PromotionResult promotionResult = promotions.createPromotionResult(info, orderQuantity, orderDate);
+
+        PromotionResult expectedResult = new PromotionResult("요아정", 2500, expectedAppliedQuantity,
+                expectedFreeQuantity);
+        assertThat(promotionResult).isEqualTo(expectedResult);
     }
 }
