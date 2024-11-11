@@ -36,4 +36,14 @@ public final class OrderMapper {
                 .toList();
         return Promotions.of(promotions);
     }
+
+    public static OrderRequests toOrderRequests(OrderRequestsDTO orderRequestDTOs) {
+        List<OrderRequest> orderRequests = orderRequestDTOs.orderRequests()
+                .stream().map(orderRequestDTO -> OrderRequest.of(
+                        orderRequestDTO.productName(),
+                        orderRequestDTO.orderQuantity()
+                ))
+                .toList();
+        return OrderRequests.of(orderRequests, orderRequestDTOs.orderDate());
+    }
 }
