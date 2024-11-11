@@ -17,6 +17,6 @@ public final class Repeater {
     public static void executeWhileTrue(Runnable action, Supplier<Boolean> orderStop) {
         do {
             action.run();
-        } while (!orderStop.get());
+        } while (orderStop.get());
     }
 }
