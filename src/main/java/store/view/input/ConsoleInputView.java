@@ -36,4 +36,11 @@ public class ConsoleInputView implements InputView {
         String response = Console.readLine();
         return UserOptionDTO.of(response);
     }
+
+    @Override
+    public UserOptionDTO inputMembershipOption() {
+        System.out.println(REQUEST_MEMBERSHIP_OPTION);
+        String response = Console.readLine();
+        return UserOptionDTO.of(response);
+    }
 }
