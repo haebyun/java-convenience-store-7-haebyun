@@ -1,6 +1,8 @@
 package store.controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import store.domain.membership.MembershipCalculator;
 import store.domain.order.Order;
 import store.domain.order.vo.OrderLine;
@@ -42,6 +44,27 @@ public class OrderController {
         this.productDataLoader = productDataLoader;
         this.promotionDataLoader = promotionDataLoader;
         this.membershipCalculator = membershipCalculator;
+    }
+
+    private Order processOrder(OrderRequests orderRequests, Products products, Promotions promotions) {
+        List<PromotionLine> promotionLines = new ArrayList<>();
+        List<OrderLine> orderLines = new ArrayList<>();
+        LocalDate orderDate = orderRequests.orderDate();
+        for (OrderRequest orderRequest : orderRequests.orderRequests()) {
+            if (isPromotionApplicable(orderRequest, products)) {
+                PromotionProductInfo promotionProductInfo = products.getPromotionProductInfo(
+                        orderRequest.productName());
+                orderRequest = updateOrderRequest(orderRequest, promotionProductInfo, promotions, orderDate);
+                PromotionLine promotionLine = applyPromotion(orderRequest, promotionProductInfo, promotions, orderDate);
+                promotionLines.add(promotionLine);
+            }
+            orderLines.add(processOrderLine(orderRequest, products));
+        }
+        return new Order(orderLines, promotionLines);
+    }
+
+    private boolean isPromotionApplicable(OrderRequest orderRequest, Products products) {
+        return products.isPromotionProductExist(orderRequest.productName());
     }
 
     private OrderRequest updateOrderRequest(
