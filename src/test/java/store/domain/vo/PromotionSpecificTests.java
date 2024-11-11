@@ -31,18 +31,18 @@ public class PromotionSpecificTests {
 
     @ParameterizedTest
     @CsvSource({
-            "2, 1, 2, 1",    // 2+1 프로모션 조건 충족
-            "2, 1, 4, 2",    // 조건을 두 번 충족하는 경우
-            "2, 1, 5, 2",    // 조건 충족 이후 나머지가 있는 경우
-            "1, 1, 6, 6",    // 1+1 프로모션
-            "3, 2, 7, 4",    // 조건 충족 이후 나머지가 있는 경우
-            "3, 2, 6, 4"     // 3+2 프로모션
+            "2, 1, 3, 1",    // 2+1 프로모션 조건 충족
+            "2, 1, 6, 2",    // 조건을 두 번 충족하는 경우
+            "2, 1, 7, 2",    // 조건 충족 이후 나머지가 있는 경우
+            "1, 1, 12, 6",    // 1+1 프로모션
+            "3, 2, 7, 2",    // 조건 충족 이후 나머지가 있는 경우
+            "3, 2, 6, 2"     // 3+2 프로모션
     })
     @DisplayName("구매 수량에 따라 무료 제공 수량을 계산한다.")
-    void testsCalculateFreeCount(int buy, int get, int purchasedQuantity, int expectedBonus) {
+    void testsGetFreeCount(int buy, int get, int purchasedQuantity, int expectedBonus) {
         PromotionSpecific promotionSpecific = PromotionSpecific.of(buy, get);
 
-        int bonus = promotionSpecific.calculateFreeCount(purchasedQuantity);
+        int bonus = promotionSpecific.getFreeCount(purchasedQuantity);
 
         assertThat(bonus).isEqualTo(expectedBonus);
     }
@@ -53,7 +53,7 @@ public class PromotionSpecificTests {
     void testsCalculateBonusWhenPurchasedQuantityIsSmall(int purchasedQuantity) {
         PromotionSpecific promotionSpecific = PromotionSpecific.of(3, 1);
 
-        int bonus = promotionSpecific.calculateFreeCount(purchasedQuantity);
+        int bonus = promotionSpecific.getFreeCount(purchasedQuantity);
 
         assertThat(bonus).isEqualTo(0);
     }
