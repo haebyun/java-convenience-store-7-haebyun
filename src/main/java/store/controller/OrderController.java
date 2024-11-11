@@ -2,12 +2,14 @@ package store.controller;
 
 import java.time.LocalDate;
 import store.domain.membership.MembershipCalculator;
+import store.domain.order.vo.PromotionLine;
 import store.domain.product.Products;
 import store.domain.promotion.Promotions;
 import store.domain.vo.OrderRequest;
 import store.domain.vo.OrderRequests;
 import store.domain.vo.PromotionData;
 import store.domain.vo.PromotionProductInfo;
+import store.domain.vo.PromotionResult;
 import store.domain.vo.UserOption;
 import store.dto.request.OrderRequestsDTO;
 import store.dto.request.UserOptionDTO;
@@ -77,6 +79,22 @@ public class OrderController {
             return OrderRequest.withReduceFullPayQuantity(orderRequest, promotionData.fullPayQuantity());
         }
         return orderRequest;
+    }
+
+    private PromotionLine applyPromotion(
+            OrderRequest orderRequest,
+            PromotionProductInfo promotionProductInfo,
+            Promotions promotions,
+            LocalDate orderDate
+    ) {
+        PromotionResult promotionResult = promotions.createPromotionResult(promotionProductInfo,
+                orderRequest.quantity(), orderDate);
+        return new PromotionLine(
+                promotionResult.productName(),
+                promotionResult.productPrice(),
+                promotionResult.appliedProductQuantity(),
+                promotionResult.freeQuantity()
+        );
     }
 
     private OrderRequests getValidOrderRequests(Products products) {
