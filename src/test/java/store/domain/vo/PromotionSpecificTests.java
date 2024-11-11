@@ -75,4 +75,18 @@ public class PromotionSpecificTests {
 
         assertThat(additionalFreeItems).isEqualTo(expectedAdditionalFreeItems);
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "2, 1, 4, 1",
+            "3, 2, 7, 2",
+            "1, 1, 2, 0",
+            "2, 1, 9, 0",
+    })
+    @DisplayName("주어진 갯수에 따라 프로모션이 적용되지 않고 남는 갯수를 반환하는 로직 구현 테스트")
+    void testGetRemainingStock(int buy, int get, int quantity, int expectedRemainingStock) {
+        PromotionSpecific promotionSpecific = PromotionSpecific.of(buy, get);
+        int remainingStock = promotionSpecific.getRemainingStock(quantity);
+        assertThat(remainingStock).isEqualTo(expectedRemainingStock);
+    }
 }
