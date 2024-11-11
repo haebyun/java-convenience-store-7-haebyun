@@ -16,7 +16,6 @@ import store.domain.vo.PromotionData;
 import store.domain.vo.PromotionProductInfo;
 import store.domain.vo.PromotionResult;
 import store.domain.vo.UserOption;
-import store.dto.request.OrderRequestsDTO;
 import store.dto.request.UserOptionDTO;
 import store.exception.ErrorMessage;
 import store.loader.ProductDataLoader;
@@ -51,64 +50,108 @@ public class OrderController {
         Products products = OrderMapper.toProductsDomain(productDataLoader.loadProducts("products.md"));
         Promotions promotions = OrderMapper.toPromotionsDomain(promotionDataLoader.loadPromotions("promotions.md"));
 
+        runOrderProcess(products, promotions);
+    }
+
+    private void runOrderProcess(Products products, Promotions promotions) {
         Repeater.executeWhileTrue(() -> {
             outputView.printProductsStocks(products);
-            List<OrderResult> orderResults = processOrderCycle(products, promotions);
-            for (OrderResult orderResult : orderResults) {
-                products.updateProductStock(orderResult.productName(), orderResult.quantity());
-            }
-        }, this::shouldTerminateLoop);
+            processOneOrderCycle(products, promotions);
+        }, this::shouldContinueOrdering);
     }
 
-    private List<OrderResult> processOrderCycle(Products products, Promotions promotions) {
-        OrderRequests orderRequests = getValidOrderRequests(products);
-        Order order = processOrder(orderRequests, products, promotions);
-        Integer membershipDiscountAmount = applyMembership(order);
-        outputView.printReceipt(order, membershipDiscountAmount);
-        return order.createOrderResult();
-    }
-
-    private boolean shouldTerminateLoop() {
+    private Boolean shouldContinueOrdering() {
         UserOption userResponse = getValidOrderRepeatOption();
-        return userResponse.isNo();
+        return userResponse.isYes();
     }
 
-    private Order processOrder(OrderRequests orderRequests, Products products, Promotions promotions) {
-        List<PromotionLine> promotionLines = new ArrayList<>();
+    private void processOneOrderCycle(Products products, Promotions promotions) {
+        OrderRequests orderRequests = getValidOrderRequests(products, promotions);
+        Order order = createOrder(orderRequests, products, promotions);
+        Integer membershipDiscount = applyMembership(order.calculateMembershipTargetAmount());
+        outputView.printReceipt(order, membershipDiscount);
+        updateProductStocks(products, order.createOrderResult());
+    }
+
+    private void updateProductStocks(Products products, List<OrderResult> orderResults) {
+        orderResults.forEach(
+                result -> products.updateProductStock(result.productName(), result.quantity())
+        );
+    }
+
+    private Order createOrder(OrderRequests orderRequests, Products products, Promotions promotions) {
+        List<OrderLine> orderLines = createOrderLines(orderRequests, products);
+        List<PromotionLine> promotionLines = createPromotionLines(orderRequests, products, promotions);
+        return Order.of(orderLines, promotionLines);
+    }
+
+    private List<OrderLine> createOrderLines(OrderRequests requests, Products products) {
         List<OrderLine> orderLines = new ArrayList<>();
-        LocalDate orderDate = orderRequests.orderDate();
-        for (OrderRequest orderRequest : orderRequests.orderRequests()) {
-            if (isPromotionApplicable(orderRequest, products)) {
-                PromotionProductInfo promotionProductInfo = products.getPromotionProductInfo(
-                        orderRequest.productName());
-                orderRequest = updateOrderRequest(orderRequest, promotionProductInfo, promotions, orderDate);
-                PromotionLine promotionLine = applyPromotion(orderRequest, promotionProductInfo, promotions, orderDate);
-                promotionLines.add(promotionLine);
-            }
-            orderLines.add(processOrderLine(orderRequest, products));
+        for (OrderRequest request : requests.orderRequests()) {
+            orderLines.add(processOrderLine(request, products));
         }
-        return new Order(orderLines, promotionLines);
+        return orderLines;
     }
 
-    private boolean isPromotionApplicable(OrderRequest orderRequest, Products products) {
-        return products.isPromotionProductExist(orderRequest.productName());
+    private List<PromotionLine> createPromotionLines(OrderRequests requests, Products products, Promotions promotions) {
+        List<PromotionLine> promotionLines = new ArrayList<>();
+        for (OrderRequest request : requests.orderRequests()) {
+            if (isPromotionApplicable(request, products, promotions, requests.orderDate())) {
+                PromotionProductInfo promotionProductInfo = products.getPromotionProductInfo(request.productName());
+                promotionLines.add(createPromotion(request, promotionProductInfo, promotions, requests.orderDate()));
+            }
+        }
+        return promotionLines;
+    }
+
+    private OrderRequests getValidOrderRequests(Products products, Promotions promotions) {
+        return Repeater.executeWithRetry(
+                () -> {
+                    OrderRequests requests = OrderMapper.toOrderRequests(inputView.inputOrderRequests());
+                    validateProductExist(requests, products);
+                    validateStockAvailability(requests, products);
+                    return updateOrderRequests(requests, products, promotions);
+                },
+                outputView::printError
+        );
+    }
+
+    private OrderRequests updateOrderRequests(OrderRequests requests, Products products, Promotions promotions) {
+        List<OrderRequest> updatedOrderRequests = new ArrayList<>();
+        for (OrderRequest request : requests.orderRequests()) {
+            updatedOrderRequests.add(updateOrderRequest(request, products, promotions, requests.orderDate()));
+        }
+        return OrderRequests.of(updatedOrderRequests, requests.orderDate());
+    }
+
+    private OrderRequest updateOrderRequest(OrderRequest request, Products products, Promotions promotions,
+                                            LocalDate orderDate) {
+        if (isPromotionApplicable(request, products, promotions, orderDate)) {
+            PromotionProductInfo promotionProductInfo = products.getPromotionProductInfo(request.productName());
+            PromotionData promotionData = promotions.createPromotionData(promotionProductInfo, request.quantity(),
+                    orderDate);
+            return updateOrderRequest(request, promotionData);
+        }
+        return request;
+    }
+
+    private Boolean isPromotionApplicable(OrderRequest request, Products products, Promotions promotions,
+                                          LocalDate orderDate) {
+        String PromotionName = products.findPromotionNameByProductName(request.productName());
+        return promotions.isPromotionActiveOnDate(PromotionName, orderDate);
     }
 
     private OrderRequest updateOrderRequest(
-            OrderRequest orderRequest,
-            PromotionProductInfo promotionProductInfo,
-            Promotions promotions,
-            LocalDate orderDate
+            OrderRequest request,
+            PromotionData promotionData
     ) {
-        PromotionData promotionData = promotions.createPromotionData(promotionProductInfo, orderRequest.quantity(),
-                orderDate);
         if (promotionData.extraStock() > 0) {
-            return chooseAddPromotionStock(orderRequest, promotionData);
+            return chooseAddPromotionStock(request, promotionData);
         }
         if (promotionData.fullPayQuantity() > 0) {
-            return choosePurchaseWithoutFullPayQuantity(orderRequest, promotionData);
+            return choosePurchaseWithoutFullPayQuantity(request, promotionData);
         }
-        return orderRequest;
+        return request;
     }
 
     private OrderRequest chooseAddPromotionStock(OrderRequest orderRequest, PromotionData promotionData) {
@@ -116,7 +159,7 @@ public class OrderController {
                 orderRequest.productName(),
                 promotionData.extraStock()
         );
-        if(addFreeStockOption.isYes()) {
+        if (addFreeStockOption.isYes()) {
             return OrderRequest.withAddPromotionStock(orderRequest, promotionData.fullPayQuantity());
         }
         return orderRequest;
@@ -127,25 +170,21 @@ public class OrderController {
                 orderRequest.productName(),
                 promotionData.fullPayQuantity()
         );
-        if(fullPayOption.isNo()) {
+        if (fullPayOption.isNo()) {
             return OrderRequest.withReduceFullPayQuantity(orderRequest, promotionData.fullPayQuantity());
         }
         return orderRequest;
     }
 
-    private PromotionLine applyPromotion(
-            OrderRequest orderRequest,
-            PromotionProductInfo promotionProductInfo,
-            Promotions promotions,
-            LocalDate orderDate
-    ) {
-        PromotionResult promotionResult = promotions.createPromotionResult(promotionProductInfo,
+    private PromotionLine createPromotion(OrderRequest orderRequest, PromotionProductInfo promotionProductInfo,
+                                          Promotions promotions, LocalDate orderDate) {
+        PromotionResult result = promotions.createPromotionResult(promotionProductInfo,
                 orderRequest.quantity(), orderDate);
         return new PromotionLine(
-                promotionResult.productName(),
-                promotionResult.productPrice(),
-                promotionResult.appliedProductQuantity(),
-                promotionResult.freeQuantity()
+                result.productName(),
+                result.productPrice(),
+                result.appliedProductQuantity(),
+                result.freeQuantity()
         );
     }
 
@@ -155,27 +194,12 @@ public class OrderController {
                 pricePerProduct);
     }
 
-    private Integer applyMembership(Order order) {
+    private Integer applyMembership(Integer totalAmountOfMembershipTarget) {
         UserOption membershipOption = getValidMembershipOption();
         if (membershipOption.isYes()) {
-            return membershipCalculator.calculateMembershipDiscount(order);
+            return membershipCalculator.calculateMembershipDiscount(totalAmountOfMembershipTarget);
         }
         return 0;
-    }
-
-    private OrderRequests getValidOrderRequests(Products products) {
-        return Repeater.executeWithRetry(
-                () -> createOrderRequestsFromInput(products),
-                outputView::printError
-        );
-    }
-
-    private OrderRequests createOrderRequestsFromInput(Products products) {
-        OrderRequestsDTO orderRequestDTOs = inputView.inputOrderRequests();
-        OrderRequests orderRequests = OrderMapper.toOrderRequests(orderRequestDTOs);
-        validateProductExist(orderRequests, products);
-        validateStockAvailability(orderRequests, products);
-        return orderRequests;
     }
 
     private void validateProductExist(OrderRequests orderRequests, Products products) {
