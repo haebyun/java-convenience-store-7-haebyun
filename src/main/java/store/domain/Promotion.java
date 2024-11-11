@@ -22,4 +22,8 @@ public class Promotion {
     public Boolean isActive(LocalDate date) {
         return period.isWithinPeriod(date);
     }
+
+    public Integer getAdditionalFreeItemCount(Integer promotionStock, Integer orderQuantity) {
+        return promotionSpecific.getAdditionalFreeItems(promotionStock, orderQuantity);
+    }
 }
