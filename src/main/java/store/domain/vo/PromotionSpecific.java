@@ -24,4 +24,18 @@ public class PromotionSpecific {
         }
         return (orderQuantity / (buy + get)) * get;
     }
+
+    public Integer getAdditionalFreeItems(Integer promotionStock, Integer orderQuantity) {
+        if (canProvideAdditionalFreeItems(promotionStock, orderQuantity)) {
+            return get;
+        }
+        return 0;
+    }
+
+    private Boolean canProvideAdditionalFreeItems(Integer promotionStock, Integer orderQuantity) {
+        if (orderQuantity + get > promotionStock) {
+            return false;
+        }
+        return (orderQuantity + get) % (buy + get) == 0;
+    }
 }
