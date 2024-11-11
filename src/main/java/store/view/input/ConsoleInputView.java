@@ -20,6 +20,7 @@ public class ConsoleInputView implements InputView {
         System.out.println(REQUEST_ORDER_REQUESTS);
         String response = Console.readLine();
         List<OrderRequestDTO> orderRequestDTOs = InputParser.parseOrderRequests(response);
+        System.out.println();
         return OrderRequestsDTO.of(orderRequestDTOs, DateTimes.now().toLocalDate());
     }
 
@@ -27,6 +28,7 @@ public class ConsoleInputView implements InputView {
     public UserOptionDTO inputAddFreeStockOption(String productName, int additionalQuantity) {
         System.out.printf(REQUEST_ADD_FREE_STOCK_OPTION, productName, additionalQuantity);
         String response = Console.readLine();
+        System.out.println();
         return UserOptionDTO.of(response);
     }
 
@@ -34,6 +36,7 @@ public class ConsoleInputView implements InputView {
     public UserOptionDTO inputPurchaseFullPayOption(String productName, int nonPromotionQuantity) {
         System.out.printf(REQUEST_PURCHASE_FULL_PAY_OPTION, productName, nonPromotionQuantity);
         String response = Console.readLine();
+        System.out.println();
         return UserOptionDTO.of(response);
     }
 
@@ -41,6 +44,7 @@ public class ConsoleInputView implements InputView {
     public UserOptionDTO inputMembershipOption() {
         System.out.println(REQUEST_MEMBERSHIP_OPTION);
         String response = Console.readLine();
+        System.out.println();
         return UserOptionDTO.of(response);
     }
 
@@ -48,6 +52,7 @@ public class ConsoleInputView implements InputView {
     public UserOptionDTO inputOrderRepeatOption() {
         System.out.println(REQUEST_ORDER_REPEAT_OPTION);
         String response = Console.readLine();
+        System.out.println();
         return UserOptionDTO.of(response);
     }
 }

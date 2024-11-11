@@ -13,7 +13,7 @@ public class ConsoleOutputView implements OutputView{
     @Override
     public void printProductsStocks(Products products) {
         String formattedStocks = OutputFormatter.formatProductsStocks(products);
-        System.out.println(formattedStocks);
+        System.out.print(formattedStocks);
     }
 
     @Override

@@ -12,10 +12,12 @@ public final class OutputFormatter {
     private static final String RECEIPT_HEADER = "==============W 편의점================\n상품명\t\t\t\t수량\t\t금액\n";
     private static final String RECEIPT_FOOTER = "=============증\t\t정===============\n";
     private static final String RECEIPT_SEPARATOR = "====================================\n";
+    private static final String LINE_SEPARATOR = System.lineSeparator();
 
     public static String formatProductsStocks(Products products) {
         StringBuilder sb = new StringBuilder();
         sb.append(START_MESSAGE);
+        sb.append(LINE_SEPARATOR);
         for (Product product : products.getProducts()) {
             sb.append(formatSingleProductStock(product));
         }
