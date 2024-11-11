@@ -18,14 +18,14 @@ public class Promotions {
         return new Promotions(promotions);
     }
 
-    private Optional<Promotion> getByName(String name) {
+    private Optional<Promotion> findPromotionByName(String name) {
         return promotions.stream()
                 .filter(promo -> name.equals(promo.getName()))
                 .findAny();
     }
 
     public PromotionData createPromotionData(PromotionProductInfo info, Integer orderQuantity, LocalDate orderDate) {
-        return getByName(info.promotionName())
+        return findPromotionByName(info.promotionName())
                 .filter(promotion -> promotion.isActive(orderDate))
                 .map(promotion -> buildData(promotion, info, orderQuantity))
                 .orElse(new PromotionData(0, 0));
@@ -38,7 +38,7 @@ public class Promotions {
     }
 
     public PromotionResult createPromotionResult(PromotionProductInfo info, Integer orderQuantity, LocalDate orderDate) {
-        return getByName(info.promotionName())
+        return findPromotionByName(info.promotionName())
                 .filter(promo -> promo.isActive(orderDate))
                 .map(promo -> buildResult(promo, info, orderQuantity))
                 .orElse(new PromotionResult(info.name(), info.price(), 0, 0));
