@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import store.dto.ProductDTO;
+import store.dto.file.ProductDTO;
 import store.exception.ErrorMessage;
 
 public class ProductDataLoader {

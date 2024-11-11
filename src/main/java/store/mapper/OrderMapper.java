@@ -5,8 +5,11 @@ import store.domain.product.Product;
 import store.domain.product.Products;
 import store.domain.promotion.Promotion;
 import store.domain.promotion.Promotions;
-import store.dto.ProductDTO;
-import store.dto.PromotionDTO;
+import store.domain.vo.OrderRequest;
+import store.domain.vo.OrderRequests;
+import store.dto.request.OrderRequestsDTO;
+import store.dto.file.ProductDTO;
+import store.dto.file.PromotionDTO;
 
 public final class OrderMapper {
     public static Products toProductsDomain(List<ProductDTO> productDTOs) {

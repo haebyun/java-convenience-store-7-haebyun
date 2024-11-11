@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import store.dto.PromotionDTO;
+import store.dto.file.PromotionDTO;
 import store.exception.ErrorMessage;
 
 public class PromotionDataLoader {
