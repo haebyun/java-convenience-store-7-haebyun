@@ -1,5 +1,8 @@
 package store.view.output.formatter;
 
+import store.domain.order.Order;
+import store.domain.order.vo.OrderLine;
+import store.domain.order.vo.PromotionLine;
 import store.domain.product.Product;
 import store.domain.product.Products;
 
@@ -45,5 +48,52 @@ public final class OutputFormatter {
         } else {
             return product.getStockValue() + "개";
         }
+    }
+
+    public static String formatReceipt(Order order, Integer membershipDiscountAmount) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(RECEIPT_HEADER);
+        appendOrderLines(sb, order);
+        sb.append(RECEIPT_FOOTER);
+        appendPromotionLines(sb, order);
+        sb.append(RECEIPT_SEPARATOR);
+        appendSummary(sb, order, membershipDiscountAmount);
+        return sb.toString();
+    }
+
+    private static void appendOrderLines(StringBuilder sb, Order order) {
+        for (OrderLine orderLine : order.getOrderLines()) {
+            sb.append(formatOrderLine(orderLine));
+        }
+    }
+
+    private static String formatOrderLine(OrderLine orderLine) {
+        return String.format("%s\t\t\t\t%d\t\t%,d\n",
+                orderLine.getProductName(),
+                orderLine.getQuantity(),
+                orderLine.calculateOrderLinePrice());
+    }
+
+    private static void appendPromotionLines(StringBuilder sb, Order order) {
+        for (PromotionLine promotionLine : order.getPromotionLines()) {
+            sb.append(formatPromotionLine(promotionLine));
+        }
+    }
+
+    private static String formatPromotionLine(PromotionLine promotionLine) {
+        return String.format("%s\t\t\t\t%d\n",
+                promotionLine.getProductName(),
+                promotionLine.getFreeQuantity());
+    }
+
+    private static void appendSummary(StringBuilder sb, Order order, Integer membershipDiscountAmount) {
+        int totalOrderQuantity = order.calculateTotalOrderQuantity();
+        int totalOrderAmount = order.calculateTotalAmountOfOrder();
+        int totalPromotionDiscount = order.calculateTotalAmountOfPromotion();
+        int finalAmount = totalOrderAmount - totalPromotionDiscount - membershipDiscountAmount;
+        sb.append(String.format("총구매액\t\t\t\t%d\t\t%,d\n", totalOrderQuantity, totalOrderAmount));
+        sb.append(String.format("행사할인\t\t\t\t\t\t-%d\n", totalPromotionDiscount));
+        sb.append(String.format("멤버십할인\t\t\t\t\t\t-%d\n", membershipDiscountAmount));
+        sb.append(String.format("내실돈\t\t\t\t\t\t%,d\n", finalAmount));
     }
 }
