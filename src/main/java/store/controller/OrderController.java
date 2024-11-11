@@ -1,8 +1,13 @@
 package store.controller;
 
+import java.time.LocalDate;
 import store.domain.membership.MembershipCalculator;
 import store.domain.product.Products;
+import store.domain.promotion.Promotions;
+import store.domain.vo.OrderRequest;
 import store.domain.vo.OrderRequests;
+import store.domain.vo.PromotionData;
+import store.domain.vo.PromotionProductInfo;
 import store.domain.vo.UserOption;
 import store.dto.request.OrderRequestsDTO;
 import store.dto.request.UserOptionDTO;
@@ -33,6 +38,45 @@ public class OrderController {
         this.productDataLoader = productDataLoader;
         this.promotionDataLoader = promotionDataLoader;
         this.membershipCalculator = membershipCalculator;
+    }
+
+    private OrderRequest updateOrderRequest(
+            OrderRequest orderRequest,
+            PromotionProductInfo promotionProductInfo,
+            Promotions promotions,
+            LocalDate orderDate
+    ) {
+        PromotionData promotionData = promotions.createPromotionData(promotionProductInfo, orderRequest.quantity(),
+                orderDate);
+        if (promotionData.extraStock() > 0) {
+            return chooseAddPromotionStock(orderRequest, promotionData);
+        }
+        if (promotionData.fullPayQuantity() > 0) {
+            return choosePurchaseWithoutFullPayQuantity(orderRequest, promotionData);
+        }
+        return orderRequest;
+    }
+
+    private OrderRequest chooseAddPromotionStock(OrderRequest orderRequest, PromotionData promotionData) {
+        UserOption addFreeStockOption = getValidAddFreeStockOption(
+                orderRequest.productName(),
+                promotionData.extraStock()
+        );
+        if(addFreeStockOption.isYes()) {
+            return OrderRequest.withAddPromotionStock(orderRequest, promotionData.fullPayQuantity());
+        }
+        return orderRequest;
+    }
+
+    private OrderRequest choosePurchaseWithoutFullPayQuantity(OrderRequest orderRequest, PromotionData promotionData) {
+        UserOption fullPayOption = getValidFullPayOption(
+                orderRequest.productName(),
+                promotionData.fullPayQuantity()
+        );
+        if(fullPayOption.isNo()) {
+            return OrderRequest.withReduceFullPayQuantity(orderRequest, promotionData.fullPayQuantity());
+        }
+        return orderRequest;
     }
 
     private OrderRequests getValidOrderRequests(Products products) {
