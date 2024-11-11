@@ -25,23 +25,31 @@ public class Products {
         return productTotalStock < orderQuantity;
     }
 
-    public Boolean isPromotionProductExist(String productName) {
-        return products.stream()
-                .anyMatch(product -> productName.equals(product.getName()) && product.hasPromotion());
+    public void updateProductStock(String productName, Integer quantity) {
+        validateStock(productName, quantity);
+        List<Product> matchedProducts = findAndSortProductsByPromotion(productName);
+        decreaseProductStock(matchedProducts, quantity);
     }
 
-    public void updateProductStock(String productName, Integer quantity) {
+    private void validateStock(String productName, Integer quantity) {
         if (isOverStock(productName, quantity)) {
             throw new IllegalStateException(ErrorMessage.EXCEED_STOCK_QUANTITY.getMessage());
         }
-        List<Product> matchedProducts = products.stream()
+    }
+
+    private List<Product> findAndSortProductsByPromotion(String productName) {
+        return products.stream()
                 .filter(product -> productName.equals(product.getName()))
                 .sorted(Comparator.comparing(Product::hasPromotion).reversed())
                 .toList();
-        for (Product product : matchedProducts) {
-            if (quantity > 0) {
-                quantity = product.decreaseStock(quantity);
+    }
+
+    private void decreaseProductStock(List<Product> products, Integer quantity) {
+        for (Product product : products) {
+            if (quantity <= 0) {
+                break;
             }
+            quantity = product.decreaseStock(quantity);
         }
     }
 
